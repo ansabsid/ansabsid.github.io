@@ -6,6 +6,81 @@
 <title>Mohammad Ansab Siddiqui | Infrastructure & Cybersecurity Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
+    .skill-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.skill-card{
+background:#0d1722;
+border:1px solid rgba(0,212,255,.15);
+border-radius:20px;
+padding:25px;
+transition:.3s;
+position:relative;
+overflow:hidden;
+}
+
+.skill-card::before{
+content:'';
+position:absolute;
+top:0;
+left:0;
+height:4px;
+width:100%;
+background:linear-gradient(90deg,#00d4ff,#3b82f6);
+}
+
+.skill-card:hover{
+transform:translateY(-8px);
+box-shadow:0 0 30px rgba(0,212,255,.25);
+}
+
+.skill-card h3{
+color:#00d4ff;
+margin-bottom:15px;
+}
+
+.skill-card p{
+color:#cbd5e1;
+line-height:1.8;
+}
+
+@media(max-width:768px){
+.skill-grid{
+grid-template-columns:1fr;
+}
+}
+    .badge-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:30px;
+    max-width:1200px;
+    margin:auto;
+}
+
+.badge-card{
+    background:#0d1722;
+    border:1px solid rgba(0,212,255,.15);
+    border-radius:18px;
+    padding:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:.3s;
+}
+
+.badge-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 0 25px rgba(0,212,255,.25);
+}
+
+@media(max-width:768px){
+    .badge-grid{
+        grid-template-columns:1fr;
+    }
+}
 :root{
 --bg:#050b12;
 --card:#0d1722;
@@ -66,13 +141,7 @@ gap:20px;margin-top:40px}
 .timeline-item{margin-bottom:35px}
 .timeline-item h3{color:var(--accent)}
 ul{padding-left:20px}
-.badge{
-display:inline-block;
-background:#111d2b;
-border:1px solid rgba(0,212,255,.15);
-padding:10px 14px;
-border-radius:999px;
-margin:6px}
+
 footer{
 padding:40px;text-align:center;
 border-top:1px solid rgba(0,212,255,.15);
@@ -177,84 +246,89 @@ Experienced Product Consultant and Infrastructure Professional with expertise in
 
 </div>
 </div>
-
 <div class="container" id="skills">
-<h2 class="section-title">Infrastructure & Cybersecurity Skills</h2>
 
-<div class="grid">
+<h2 class="section-title">Core Competencies</h2>
 
-<div class="card">
+<div class="skill-grid">
+
+<div class="skill-card">
 <h3>Infrastructure</h3>
 <p>
-<span class="badge">Windows Server</span>
-<span class="badge">Active Directory</span>
-<span class="badge">DNS</span>
-<span class="badge">DHCP</span>
-<span class="badge">Patch Management</span>
-<span class="badge">System Administration</span>
-<span class="badge">Infrastructure Management</span>
-<span class="badge">IT Operations</span>
+Windows Server<br>
+Active Directory<br>
+DNS<br>
+DHCP<br>
+IIS Administration<br>
+Patch Management
 </p>
 </div>
 
-<div class="card">
+<div class="skill-card">
+<h3>Identity & Access Management</h3>
+<p>
+Microsoft Entra ID<br>
+SSO<br>
+Provisioning<br>
+Deprovisioning<br>
+CyberArk PAM<br>
+Authentication Services
+</p>
+</div>
+
+<div class="skill-card">
 <h3>Networking</h3>
 <p>
-<span class="badge">CCNA</span>
-<span class="badge">TCP/IP</span>
-<span class="badge">Routing</span>
-<span class="badge">Switching</span>
-<span class="badge">VLANs</span>
-<span class="badge">VPN</span>
-<span class="badge">Network Troubleshooting</span>
-<span class="badge">Cisco Technologies</span>
+CCNA<br>
+TCP/IP<br>
+Routing & Switching<br>
+VLANs<br>
+VPN<br>
+Network Troubleshooting
 </p>
 </div>
 
-<div class="card">
+<div class="skill-card">
 <h3>Cybersecurity</h3>
 <p>
-<span class="badge">SIEM</span>
-<span class="badge">Security Monitoring</span>
-<span class="badge">Threat Detection</span>
-<span class="badge">Log Analysis</span>
-<span class="badge">Incident Response</span>
-<span class="badge">Vulnerability Management</span>
-<span class="badge">Network Security</span>
-<span class="badge">Risk Assessment</span>
+ISC2 CC<br>
+SIEM<br>
+Splunk<br>
+Wazuh<br>
+Wireshark<br>
+Vulnerability Management
 </p>
 </div>
 
-<div class="card">
-<h3>Tools & Platforms</h3>
+<div class="skill-card">
+<h3>Cloud & Virtualization</h3>
 <p>
-<span class="badge">Wireshark</span>
-<span class="badge">Splunk</span>
-<span class="badge">Wazuh</span>
-<span class="badge">Kali Linux</span>
-<span class="badge">Nmap</span>
-<span class="badge">Windows Event Viewer</span>
-<span class="badge">Azure</span>
-<span class="badge">AWS</span>
+AWS<br>
+Azure<br>
+VMware<br>
+UTM<br>
+Virtual Machines<br>
+Cloud Fundamentals
 </p>
 </div>
 
-<div class="card">
-<h3>Consulting & Presales</h3>
+<div class="skill-card">
+<h3>ITSM & Consulting</h3>
 <p>
-<span class="badge">Solution Consulting</span>
-<span class="badge">Presales Engineering</span>
-<span class="badge">POC Delivery</span>
-<span class="badge">Business Analysis</span>
-<span class="badge">Stakeholder Management</span>
-<span class="badge">Technical Workshops</span>
-<span class="badge">Product Demonstrations</span>
-<span class="badge">Implementation Consulting</span>
+Freshservice<br>
+ServiceNow<br>
+Incident Management<br>
+Change Management<br>
+Solution Consulting<br>
+Presales
 </p>
 </div>
 
 </div>
+
 </div>
+
+
 <div class="container" id="certifications">
     <h2 class="section-title">Professional Certifications</h2>
 
