@@ -259,7 +259,6 @@ nav{
 .hi-value{font-family:var(--display);font-size:1rem;font-weight:700;color:#fff}
 
 /* ── Skills ──────────────────────────────────────────────────── */
-#skills{}
 .skills-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
 }
@@ -317,13 +316,11 @@ nav{
   position:relative;
 }
 .exp-item:last-child{border-bottom:none}
-/* vertical line */
 .exp-item::before{
   content:'';
   position:absolute;left:188px;top:0;bottom:0;width:1px;
   background:linear-gradient(to bottom,transparent,var(--border) 15%,var(--border) 85%,transparent);
 }
-/* dot */
 .exp-item::after{
   content:'';
   position:absolute;left:183px;top:52px;
@@ -373,7 +370,6 @@ nav{
 .exp-bullets li strong{color:var(--text)}
 
 /* ── Projects ────────────────────────────────────────────────── */
-#projects{}
 .projects-grid{
   display:grid;grid-template-columns:repeat(2,1fr);gap:28px;
 }
@@ -385,6 +381,8 @@ nav{
   position:relative;overflow:hidden;
   transition:transform .25s,box-shadow .25s,border-color .25s;
   display:flex;flex-direction:column;
+  text-decoration:none;
+  color:inherit;
 }
 .proj-card::after{
   content:'';
@@ -397,50 +395,58 @@ nav{
 }
 .proj-card:hover{
   transform:translateY(-6px);
-  box-shadow:0 24px 48px rgba(0,0,0,.3),0 0 0 1px rgba(0,200,255,.15);
-  border-color:rgba(0,200,255,.2);
+  box-shadow:0 24px 48px rgba(0,0,0,.3),0 0 0 1px rgba(0,200,255,.25);
+  border-color:rgba(0,200,255,.3);
 }
-.proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
-.proj-icon{font-size:1.8rem}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.proj-icon{
+  width:52px;height:52px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--cyan-dim);color:var(--cyan);
+  border:1px solid var(--border-bright);
+}
+.proj-icon svg{width:28px;height:28px}
 .proj-type{
   font-family:var(--mono);font-size:.65rem;
   color:var(--cyan);letter-spacing:.1em;
   text-transform:uppercase;
   background:var(--cyan-dim);
   border:1px solid var(--border-bright);
-  padding:3px 10px;border-radius:4px;
+  padding:5px 12px;border-radius:5px;
+  align-self:flex-start;
 }
 .proj-title{
-  font-family:var(--display);font-size:1.2rem;
+  font-family:var(--display);font-size:1.35rem;
   font-weight:800;color:#fff;letter-spacing:-.02em;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 .proj-desc{
-  font-size:.9rem;color:var(--muted);
-  line-height:1.7;margin-bottom:20px;flex:1;
+  font-size:.92rem;color:var(--muted);
+  line-height:1.7;margin-bottom:22px;flex:1;
 }
-.proj-tech{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
-.proj-card.featured{
-  border-color:rgba(0,200,255,.25);
-  background:linear-gradient(135deg,var(--surface),rgba(0,200,255,.03));
+.proj-tech{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
+.proj-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--display);font-weight:700;font-size:.85rem;
+  color:var(--cyan);letter-spacing:-.01em;
+  transition:gap .2s;
 }
-.proj-card.featured::before{
-  content:'★ Featured';
-  position:absolute;top:16px;right:16px;
-  font-family:var(--mono);font-size:.62rem;
-  color:var(--cyan);letter-spacing:.08em;
-  background:var(--cyan-dim);border:1px solid var(--border-bright);
-  padding:2px 8px;border-radius:3px;
+.proj-card:hover .proj-cta{gap:14px}
+.proj-cta .arrow{transition:transform .2s}
+.proj-card:hover .proj-cta .arrow{transform:translateX(4px)}
+.proj-live{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.6rem;
+  color:#4ade80;letter-spacing:.1em;text-transform:uppercase;
+  margin-left:auto;
+}
+.proj-live::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:#4ade80;box-shadow:0 0 8px #4ade80;
+  animation:pulse 2s ease-in-out infinite;
 }
 
-/* White card — Credly badges render on light backgrounds */
-
-    
-
-@media(max-width:768px){
-    
-}
-
+/* ── Certifications (Credly) ─────────────────────────────────── */
 .badge-grid{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -470,6 +476,7 @@ nav{
     border-radius:12px;
     box-shadow:0 0 25px rgba(0,212,255,.25);
 }
+.container{padding:100px 5%;position:relative;z-index:1;max-width:1280px;margin:0 auto}
 @media(max-width:768px){
     .badge-grid{
         grid-template-columns:1fr;
@@ -544,13 +551,11 @@ footer span{color:var(--cyan)}
   .exp-item{grid-template-columns:1fr;gap:8px}
   .exp-item::before,.exp-item::after{display:none}
   .projects-grid{grid-template-columns:1fr}
-  .certs-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
   .nav-links{display:none}
   .skills-grid{grid-template-columns:1fr}
   .hero-stats{grid-template-columns:1fr 1fr}
-  .certs-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -579,8 +584,8 @@ footer span{color:var(--cyan)}
         <span>Ansab Siddiqui</span>
       </h1>
       <p class="hero-role">
-        <strong>Technical Consultant · Systems Administrator · IAM Engineer</strong><br>
-        4+ years building enterprise infrastructure, identity systems, and ITSM solutions across MENA, Africa, and Asia. CCNA certified. Based in Dubai, UAE.
+        <strong>ITSM Consultant · Technical Consultant · Infrastructure Professional</strong><br>
+        4+ years building enterprise infrastructure, ITSM solutions, and identity systems across MENA, Africa, and Asia. CCNA certified. Based in Dubai, UAE.
       </p>
       <div class="hero-actions">
         <a href="mailto:ansab.sid123@gmail.com" class="btn-primary">✉ Get in Touch</a>
@@ -618,9 +623,9 @@ footer span{color:var(--cyan)}
         <div><span class="t-prompt">▸</span> <span class="t-cmd">whoami</span></div>
         <div class="t-green">Mohammad Ansab Siddiqui</div>
         <div style="margin-top:8px"><span class="t-prompt">▸</span> <span class="t-cmd">cat role.txt</span></div>
+        <div class="t-out">ITSM Consultant</div>
         <div class="t-out">Technical Consultant</div>
-        <div class="t-out">Systems Administrator</div>
-        <div class="t-out">IAM Engineer</div>
+        <div class="t-out">Infrastructure Professional</div>
         <div style="margin-top:8px"><span class="t-prompt">▸</span> <span class="t-cmd">certifications --list</span></div>
         <div class="t-yellow">✓ Cisco CCNA 200-301</div>
         <div class="t-yellow">✓ AWS Cloud Practitioner</div>
@@ -642,9 +647,9 @@ footer span{color:var(--cyan)}
     <h2 class="section-title">About <span>Me</span></h2>
     <div class="about-grid">
       <div class="about-text">
-        <p>I'm a <strong>Technical Consultant and Systems Administrator</strong> with over 4 years of hands-on experience across enterprise IT infrastructure, identity management, and ITSM operations. I've delivered solutions in the <strong>UAE, MENA, Africa, and Asia</strong> — bridging the gap between technical implementation and business outcomes.</p>
-        <p>My background spans three complementary domains: <strong>infrastructure administration</strong> (Windows/Linux servers, patching, networking), <strong>identity & access management</strong> (Microsoft Entra ID, Active Directory, SSO, CyberArk PAM), and <strong>consulting</strong> (Freshservice, ServiceNow, ITIL-aligned delivery, stakeholder management).</p>
-        <p>I'm currently deepening my cybersecurity knowledge — pursuing <strong>CompTIA Security+</strong> and building hands-on skills in SIEM, log analysis, and threat detection through TryHackMe and home lab work.</p>
+        <p>I'm an <strong>ITSM Consultant and Technical Consultant</strong> with over 4 years of hands-on experience across enterprise IT infrastructure, ITSM operations, and identity management. I've delivered solutions in the <strong>UAE, KSA, Oman, MENA, Africa, and Asia</strong> — bridging the gap between technical implementation and business outcomes.</p>
+        <p>My background spans three complementary domains: <strong>ITSM consulting</strong> (Freshservice, ServiceNow, ITIL-aligned delivery), <strong>infrastructure administration</strong> (Windows/Linux servers, patching, networking), and <strong>identity fundamentals</strong> (Microsoft Entra ID, Active Directory, SSO, CyberArk PAM).</p>
+        <p>I'm currently deepening my cybersecurity knowledge — pursuing <strong>CompTIA Security+</strong> and building hands-on skills in SIEM, log analysis, and threat detection through home lab work.</p>
       </div>
       <div class="about-highlights">
         <div class="highlight-item">
@@ -657,11 +662,11 @@ footer span{color:var(--cyan)}
         </div>
         <div class="highlight-item">
           <div class="hi-label">Top Skills</div>
-          <div class="hi-value">Entra ID · ServiceNow · CCNA · CyberArk · IIS</div>
+          <div class="hi-value">Freshservice · ServiceNow · CCNA · CyberArk · IIS</div>
         </div>
         <div class="highlight-item">
           <div class="hi-label">Currently Learning</div>
-          <div class="hi-value">CompTIA Security+ · Splunk · SIEM/SOC Operations</div>
+          <div class="hi-value">CompTIA Security+ · ITIL 4 · SIEM/SOC Operations</div>
         </div>
         <div class="highlight-item">
           <div class="hi-label">Education</div>
@@ -684,6 +689,18 @@ footer span{color:var(--cyan)}
     <div class="skills-grid">
 
       <div class="skill-card">
+        <span class="sk-icon">🛠️</span>
+        <div class="sk-title">ITSM & Service Delivery</div>
+        <div class="sk-tags">
+          <span class="tag">Freshservice</span><span class="tag">ServiceNow</span>
+          <span class="tag">Freshdesk</span><span class="tag">ITIL v4</span>
+          <span class="tag">Incident Management</span><span class="tag">Change Management</span>
+          <span class="tag">SLA / KPI</span><span class="tag">CAB</span>
+          <span class="tag">Workflow Automation</span><span class="tag">Tier 2/3 Support</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
         <span class="sk-icon">🖥️</span>
         <div class="sk-title">Infrastructure & Sysadmin</div>
         <div class="sk-tags">
@@ -697,25 +714,12 @@ footer span{color:var(--cyan)}
 
       <div class="skill-card">
         <span class="sk-icon">🔐</span>
-        <div class="sk-title">Identity & Access Management</div>
+        <div class="sk-title">Identity & Security</div>
         <div class="sk-tags">
-          <span class="tag">Microsoft Entra ID</span><span class="tag">Azure AD</span>
-          <span class="tag">SSO / SAML / OAuth</span><span class="tag">SCIM</span>
-          <span class="tag">MFA / RBAC</span><span class="tag">CyberArk PAM</span>
-          <span class="tag">Hybrid Identity</span><span class="tag">Zero Trust</span>
-          <span class="tag">Azure AD Connect</span>
-        </div>
-      </div>
-
-      <div class="skill-card">
-        <span class="sk-icon">🛠️</span>
-        <div class="sk-title">ITSM & Service Delivery</div>
-        <div class="sk-tags">
-          <span class="tag">ServiceNow</span><span class="tag">Freshservice</span>
-          <span class="tag">ITIL v4</span><span class="tag">Incident Management</span>
-          <span class="tag">Change Management</span><span class="tag">SLA / KPI</span>
-          <span class="tag">CAB</span><span class="tag">Workflow Automation</span>
-          <span class="tag">Tier 2/3 Support</span>
+          <span class="tag">Microsoft Entra ID</span><span class="tag">Active Directory</span>
+          <span class="tag">SSO / SAML</span><span class="tag">Provisioning</span>
+          <span class="tag">CyberArk PAM</span><span class="tag">ISC2 CC</span>
+          <span class="tag">Vulnerability Mgmt</span><span class="tag">MFA</span>
         </div>
       </div>
 
@@ -768,21 +772,21 @@ footer span{color:var(--cyan)}
         <div class="exp-meta">
           <div class="exp-date">May 2025 – Present</div>
           <div class="exp-co">Vistar</div>
-          <div class="exp-loc">Dubai, UAE</div>
+          <div class="exp-loc">Dubai, UAE · Freshworks Partner</div>
         </div>
         <div class="exp-content">
           <h3>Technical Manager — ITSM & Solutions</h3>
           <div class="exp-tags">
             <span class="exp-tag">Consulting</span>
-            <span class="exp-tag">IAM</span>
+            <span class="exp-tag">Freshservice</span>
             <span class="exp-tag">ITSM</span>
             <span class="exp-tag">Entra ID</span>
           </div>
           <ul class="exp-bullets">
-            <li>Architected <strong>Microsoft Entra ID integrations</strong> (SCIM, SSO/SAML, MFA, RBAC, Conditional Access) — reducing manual provisioning by <strong>~60%</strong> across client environments.</li>
-            <li>Designed <strong>Freshservice automation workflows</strong>, SLA policies and approval processes — improving ticket resolution by <strong>~35%</strong> and achieving <strong>95%+ SLA compliance</strong> as Tier 3 escalation point.</li>
-            <li>Delivered <strong>REST API integrations</strong> between ITSM platforms, identity systems, and business apps supporting <strong>500+ user lifecycle automation</strong>.</li>
-            <li>Created solution architecture blueprints, POC implementations, and technical workshops for C-level IT stakeholders at enterprise clients.</li>
+            <li>Implemented <strong>Freshservice ITSM</strong> for 9 enterprise clients including Rivoli Group, Mirage Global (Emaar), Etihad Rail, and Maarif Education KSA — achieving <strong>95%+ SLA compliance</strong>.</li>
+            <li>Designed automation workflows, SLA policies, and approval processes; served as <strong>Tier 3 escalation</strong> point across all accounts.</li>
+            <li>Delivered <strong>REST API integrations</strong> between Freshservice, Active Directory, and Entra ID supporting <strong>500+ user lifecycle automations</strong>.</li>
+            <li>Created solution architecture, POC environments, and technical workshops for C-level IT stakeholders.</li>
           </ul>
         </div>
       </div>
@@ -802,10 +806,10 @@ footer span{color:var(--cyan)}
             <span class="exp-tag">IIS / SQL</span>
           </div>
           <ul class="exp-bullets">
-            <li>Managed <strong>15+ enterprise production deployments</strong> across MENA, Africa, and Asia — full lifecycle from prerequisites through go-live.</li>
-            <li>Deployed and optimized <strong>IIS-hosted enterprise apps</strong> on Windows Server; SQL Server backup automation cut unplanned downtime by <strong>~40%</strong>.</li>
+            <li>Delivered <strong>15+ enterprise deployments</strong> (POS, PMS, Back Office) across MENA, Africa, and Asia for clients including Wagamama, Gevora Hotel, and Landmark Group.</li>
+            <li>Deployed and optimized <strong>IIS-hosted enterprise apps</strong> on Windows Server; SQL Server backup automation cut downtime significantly.</li>
             <li>Diagnosed complex failures (DNS, IP conflicts, IIS application pools, SSL) and performed <strong>root cause analysis (RCA)</strong> within SLA windows.</li>
-            <li>Delivered technical training, go-live support, and operational handover documentation across <strong>hybrid Windows/Linux environments</strong>.</li>
+            <li>Delivered technical training, go-live support, and operational handover across <strong>hybrid Windows/Linux environments</strong>.</li>
           </ul>
         </div>
       </div>
@@ -814,7 +818,7 @@ footer span{color:var(--cyan)}
         <div class="exp-meta">
           <div class="exp-date">Aug 2021 – Mar 2023</div>
           <div class="exp-co">HCL Technologies</div>
-          <div class="exp-loc">Lucknow, India</div>
+          <div class="exp-loc">Lucknow, India · Client: Disney</div>
         </div>
         <div class="exp-content">
           <h3>Windows Server Administrator</h3>
@@ -825,9 +829,9 @@ footer span{color:var(--cyan)}
             <span class="exp-tag">CyberArk</span>
           </div>
           <ul class="exp-bullets">
-            <li>Administered <strong>200+ Windows and Linux servers</strong> — CVE-based patch deployment via BigFix + ServiceNow CAB achieving <strong>98%+ patch compliance</strong>.</li>
-            <li>Utilized <strong>CyberArk PAM</strong> for audited privileged access; Linux log analysis and problem management to eliminate repeat infrastructure incidents.</li>
-            <li>Managed full ServiceNow ITSM lifecycle (Tier 2/3): Incident, Change, Problem Management, SLA compliance within <strong>ITIL-aligned operations</strong>.</li>
+            <li>Administered <strong>200+ Windows and Linux servers</strong> within Disney's enterprise infrastructure — CVE-based patch deployment via BigFix + ServiceNow CAB achieving <strong>98% patch compliance</strong>.</li>
+            <li>Utilized <strong>CyberArk PAM</strong> for audited privileged access; Linux log analysis and problem management to eliminate repeat incidents.</li>
+            <li>Managed full ServiceNow ITSM lifecycle (Tier 2/3): Incident, Change, Problem Management within <strong>ITIL-aligned operations</strong>.</li>
           </ul>
         </div>
       </div>
@@ -840,67 +844,51 @@ footer span{color:var(--cyan)}
 <section id="projects" class="section">
   <div class="section-inner reveal">
     <div class="section-label">04 — Portfolio</div>
-    <h2 class="section-title">Featured <span>Projects</span></h2>
+    <h2 class="section-title">Interactive <span>Projects</span></h2>
     <div class="projects-grid">
 
-      <div class="proj-card featured">
+      <a href="kill-chain.html" class="proj-card" target="_blank" rel="noopener">
         <div class="proj-header">
-          <div class="proj-icon">🏗️</div>
-          <div class="proj-type">Infrastructure Lab</div>
+          <div class="proj-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9.5 12l2 2 3.5-4"/></svg>
+          </div>
+          <span class="proj-live">Live</span>
         </div>
-        <div class="proj-title">CCNA Enterprise Network Lab</div>
-        <div class="proj-desc">Three-tier hierarchical enterprise network built in Cisco Packet Tracer. Covers OSPF, VLANs, STP, HSRP, NAT, ACLs, DHCP snooping, port security and more — demonstrating all major CCNA 200-301 exam topics with full device configurations.</div>
+        <div class="proj-type">Security · Interactive</div>
+        <div class="proj-title">The Kill Chain</div>
+        <div class="proj-desc">An interactive guide to the five core attack vectors — phishing, privilege escalation, lateral movement, vulnerability exploitation, and ransomware. For each stage, play through how the attack works, watch a live SOC detection feed, and toggle the defensive controls that stop it. Mapped to MITRE ATT&CK.</div>
         <div class="proj-tech">
-          <span class="tag">Cisco Packet Tracer</span><span class="tag">OSPF</span><span class="tag">VLANs</span>
-          <span class="tag">HSRP</span><span class="tag">NAT/PAT</span><span class="tag">ACLs</span>
+          <span class="tag">MITRE ATT&CK</span><span class="tag">SOC / SIEM</span><span class="tag">CyberArk PAM</span>
+          <span class="tag">Patch Mgmt</span><span class="tag">Defence in Depth</span>
         </div>
-      </div>
+        <span class="proj-cta">Launch interactive demo <span class="arrow">→</span></span>
+      </a>
 
-      <div class="proj-card featured">
+      <a href="how-ai-learns.html" class="proj-card" target="_blank" rel="noopener">
         <div class="proj-header">
-          <div class="proj-icon">🔐</div>
-          <div class="proj-type">IAM / Entra ID</div>
+          <div class="proj-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 5V3M12 21v-2M5 12H3M21 12h-2M7 7L5.5 5.5M18.5 18.5L17 17M17 7l1.5-1.5M5.5 18.5L7 17"/></svg>
+          </div>
+          <span class="proj-live">Live</span>
         </div>
-        <div class="proj-title">Enterprise Identity Automation</div>
-        <div class="proj-desc">Designed and implemented end-to-end identity lifecycle management using Microsoft Entra ID — SCIM provisioning, SSO via SAML/OAuth, conditional access policies, and RBAC. Integrated with Freshservice ITSM via REST API for automated joiner/mover/leaver workflows.</div>
+        <div class="proj-type">AI / ML · Interactive</div>
+        <div class="proj-title">How a Machine Learns to Think</div>
+        <div class="proj-desc">A hands-on journey through the entire modern AI pipeline. Tokenize a sentence, explore embeddings, visualize attention, play the next-token sampler, train a model and watch its loss fall, then run an AI agent through its reason-act-observe loop. Nine interactive experiments, built to be used.</div>
         <div class="proj-tech">
-          <span class="tag">Microsoft Entra ID</span><span class="tag">SCIM</span><span class="tag">SAML</span>
-          <span class="tag">REST API</span><span class="tag">Freshservice</span><span class="tag">PowerShell</span>
+          <span class="tag">LLM Fundamentals</span><span class="tag">Tokenization</span><span class="tag">Transformers</span>
+          <span class="tag">Agents</span><span class="tag">Canvas / JS</span>
         </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-header">
-          <div class="proj-icon">📊</div>
-          <div class="proj-type">ITSM Deployment</div>
-        </div>
-        <div class="proj-title">Freshservice Enterprise ITSM Implementation</div>
-        <div class="proj-desc">Full enterprise rollout of Freshservice ITSM — SLA design, automated approval workflows, service catalog, API integrations with Active Directory and third-party business tools. Reduced average ticket resolution time by 35%.</div>
-        <div class="proj-tech">
-          <span class="tag">Freshservice</span><span class="tag">ITIL v4</span>
-          <span class="tag">Workflow Automation</span><span class="tag">REST APIs</span><span class="tag">SLA Design</span>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-header">
-          <div class="proj-icon">🛡️</div>
-          <div class="proj-type">Security Operations</div>
-        </div>
-        <div class="proj-title">Vulnerability Remediation Programme</div>
-        <div class="proj-desc">Managed CVE-based patch lifecycle for 200+ server fleet using IBM BigFix integrated with ServiceNow change management. Established formal CAB workflow, remediation SLA tracking, and post-patch verification — achieving 98%+ compliance.</div>
-        <div class="proj-tech">
-          <span class="tag">IBM BigFix</span><span class="tag">ServiceNow</span>
-          <span class="tag">CVE Management</span><span class="tag">CyberArk PAM</span><span class="tag">Linux</span>
-        </div>
-      </div>
+        <span class="proj-cta">Launch interactive demo <span class="arrow">→</span></span>
+      </a>
 
     </div>
   </div>
 </section>
 
+<!-- ── CERTIFICATIONS ─────────────────────────────────────────────── -->
 <div class="container" id="certifications">
-    <h2 class="section-title">Professional Certifications</h2>
+    <div class="section-label" style="text-align:center">05 — Credentials</div>
+    <h2 class="section-title" style="text-align:center">Professional <span>Certifications</span></h2>
 <div class="badge-grid">
     <div class="badge-card">
         <div data-iframe-width="180"
@@ -952,7 +940,7 @@ footer span{color:var(--cyan)}
   <div class="contact-inner reveal">
     <div class="section-label" style="text-align:center">06 — Let's Connect</div>
     <h2 class="section-title">Get in <span>Touch</span></h2>
-    <p>Available for full-time roles, consulting engagements, and freelance projects in Dubai and remotely. Open to Technical Consultant, Systems Admin, IAM Engineer, and ITSM roles.</p>
+    <p>Available for full-time roles, consulting engagements, and freelance projects in Dubai and remotely. Open to ITSM Consultant, Technical Consultant, Systems Admin, and Service Delivery roles.</p>
     <div class="contact-links">
       <a href="mailto:ansab.sid123@gmail.com" class="contact-link">
         <span class="cl-icon">✉️</span>
@@ -994,7 +982,7 @@ footer span{color:var(--cyan)}
 </section>
 
 <footer>
-  <span>Mohammad Ansab Siddiqui</span> · Technical Consultant · Dubai, UAE · Built with intent.
+  <span>Mohammad Ansab Siddiqui</span> · ITSM Consultant · Dubai, UAE · Built with intent.
 </footer>
 
 <script>
@@ -1011,7 +999,7 @@ const io = new IntersectionObserver((entries) => {
 reveals.forEach(r => io.observe(r));
 
 // Smooth active nav highlight
-const sections = document.querySelectorAll('section[id]');
+const sections = document.querySelectorAll('section[id], div[id="certifications"]');
 const navLinks = document.querySelectorAll('.nav-links a');
 const sio = new IntersectionObserver((entries) => {
   entries.forEach(e => {
