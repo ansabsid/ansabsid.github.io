@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Kill Chain — An Interactive Guide to Attack Vectors &amp; Defence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;500;700;900&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0c10;--bg2:#10141b;--panel:#141a24;--panel2:#1a212d;
+  --hair:rgba(120,140,170,.12);--hair2:rgba(120,140,170,.2);
+  --ink:#e8edf4;--dim:#8a99ad;--faint:#566377;
+  --red:#ff4d5e;--red-dim:rgba(255,77,94,.12);
+  --amber:#ffa630;--amber-dim:rgba(255,166,48,.12);
+  --green:#34e29b;--green-dim:rgba(52,226,155,.12);
+  --blue:#4d9fff;--blue-dim:rgba(77,159,255,.12);
+  --display:'Chivo',sans-serif;--sans:'Inter Tight',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.5}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 50% -5%,rgba(255,77,94,.05),transparent 55%),radial-gradient(ellipse 50% 40% at 90% 100%,rgba(77,159,255,.04),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--hair)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--red),#c81e2e);display:flex;align-items:center;justify-content:center;color:#fff}
+.brand .logo svg{width:20px;height:20px}
+.brand .bt{font-family:var(--display);font-weight:900;font-size:1rem;letter-spacing:-.01em}
+.brand .bt span{color:var(--faint);font-weight:400}
+.topbar .tag{font-family:var(--mono);font-size:.7rem;color:var(--faint);letter-spacing:.06em}
+@media(max-width:600px){.topbar .tag{display:none}}
+
+.hero{padding:60px 0 34px;text-align:center;max-width:760px;margin:0 auto}
+.hero .kick{font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--red);margin-bottom:18px}
+.hero h1{font-family:var(--display);font-weight:900;font-size:clamp(2.1rem,5.4vw,3.6rem);line-height:1.02;letter-spacing:-.03em;margin-bottom:18px}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero p{color:var(--dim);font-size:1.06rem;line-height:1.65;max-width:600px;margin:0 auto}
+.hero .frameworks{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+.fw{font-family:var(--mono);font-size:.72rem;color:var(--dim);background:var(--panel);border:1px solid var(--hair2);border-radius:7px;padding:7px 13px}
+.fw b{color:var(--ink)}
+
+.chain{margin:40px 0 0;display:flex;gap:0;background:var(--panel);border:1px solid var(--hair2);border-radius:14px;overflow:hidden}
+.chain-step{flex:1;padding:14px 10px;text-align:center;cursor:pointer;border-right:1px solid var(--hair);transition:background .2s;position:relative}
+.chain-step:last-child{border-right:none}
+.chain-step:hover{background:var(--panel2)}
+.chain-step.active{background:var(--red-dim)}
+.chain-step.active::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--red)}
+.chain-step .cs-ico{width:24px;height:24px;margin:0 auto 7px;color:var(--faint);transition:color .2s}
+.chain-step .cs-ico svg{width:24px;height:24px}
+.chain-step.active .cs-ico{color:var(--red)}
+.chain-step.done .cs-ico{color:var(--green)}
+.chain-step .cs-n{font-family:var(--mono);font-size:.6rem;color:var(--faint);letter-spacing:.04em;margin-bottom:3px}
+.chain-step .cs-t{font-size:.74rem;font-weight:600;color:var(--dim);line-height:1.2}
+.chain-step.active .cs-t{color:var(--ink)}
+@media(max-width:680px){
+  .chain{flex-wrap:wrap}
+  .chain-step{flex:1 1 33.33%;border-bottom:1px solid var(--hair)}
+  .chain-step .cs-t{font-size:.68rem}
+}
+
+.stage{margin:28px 0 0;background:linear-gradient(180deg,var(--bg2),var(--bg));border:1px solid var(--hair2);border-radius:18px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+.stage-head{padding:24px 28px;border-bottom:1px solid var(--hair);display:flex;align-items:flex-start;gap:18px}
+.stage-head .sh-ico{width:48px;height:48px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--red-dim);color:var(--red)}
+.stage-head .sh-ico svg{width:26px;height:26px}
+.stage-head .sh-meta{flex:1}
+.stage-head .sh-mitre{font-family:var(--mono);font-size:.66rem;color:var(--red);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.stage-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.02em;line-height:1.1}
+.stage-head .sh-sub{color:var(--dim);font-size:.92rem;margin-top:6px}
+
+.tabs{display:flex;gap:4px;padding:14px 28px 0;flex-wrap:wrap}
+.tab{font-family:var(--sans);font-weight:500;font-size:.84rem;background:transparent;color:var(--dim);border:1px solid var(--hair2);border-bottom:none;border-radius:9px 9px 0 0;padding:10px 16px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab.on{background:var(--panel);color:var(--ink);border-color:var(--hair2)}
+.tab .tdot{width:7px;height:7px;border-radius:50%}
+.tab.t-attack .tdot{background:var(--red)}
+.tab.t-detect .tdot{background:var(--amber)}
+.tab.t-defend .tdot{background:var(--green)}
+
+.tabbody{padding:26px 28px 30px;background:var(--panel);min-height:280px;border-top:1px solid var(--hair2)}
+.pane{display:none;animation:fade .35s ease}
+.pane.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.pane h3{font-family:var(--display);font-weight:700;font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.pane h3 .hd{width:9px;height:9px;border-radius:50%}
+.pane p{color:var(--dim);font-size:.95rem;line-height:1.7;margin-bottom:14px;max-width:680px}
+.pane p b{color:var(--ink);font-weight:600}
+
+.sim{background:var(--bg);border:1px solid var(--hair);border-radius:13px;padding:22px;margin-top:8px}
+.sim-label{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.sim-cta{font-family:var(--mono);font-size:.72rem;color:var(--blue);margin-bottom:14px}
+
+.mail{font-family:var(--sans);background:var(--panel2);border:1px solid var(--hair2);border-radius:11px;overflow:hidden;max-width:560px}
+.mail-h{padding:13px 16px;border-bottom:1px solid var(--hair);font-size:.84rem}
+.mail-h .row{display:flex;gap:8px;margin-bottom:4px}
+.mail-h .lbl{color:var(--faint);width:50px;flex-shrink:0;font-family:var(--mono);font-size:.74rem}
+.mail-h .val{color:var(--ink)}
+.mail-b{padding:16px;font-size:.88rem;color:var(--dim);line-height:1.7}
+.flag{position:relative;cursor:pointer;border-bottom:1.5px dashed var(--faint);transition:all .2s;padding:0 2px}
+.flag:hover{background:var(--amber-dim)}
+.flag.found{background:var(--red-dim);border-bottom-color:var(--red);color:var(--red);border-radius:3px}
+.flag-count{font-family:var(--mono);font-size:.78rem;color:var(--dim);margin-top:14px}
+.flag-count b{color:var(--red)}
+.flag-count.done b{color:var(--green)}
+
+.nodes-row{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.nodex{display:flex;flex-direction:column;align-items:center;gap:7px;padding:0 4px}
+.nodex .nb{width:54px;height:54px;border-radius:13px;background:var(--panel2);border:1.5px solid var(--hair2);display:flex;align-items:center;justify-content:center;color:var(--dim);transition:all .45s}
+.nodex .nb svg{width:26px;height:26px}
+.nodex .nl{font-family:var(--mono);font-size:.62rem;color:var(--faint);transition:color .3s}
+.nodex.compromised .nb{border-color:var(--red);background:var(--red-dim);color:var(--red);box-shadow:0 0 18px rgba(255,77,94,.3)}
+.nodex.compromised .nl{color:var(--red)}
+.nodex.secured .nb{border-color:var(--green);background:var(--green-dim);color:var(--green)}
+.nodex.secured .nl{color:var(--green)}
+.conn{width:30px;height:2px;background:var(--hair2);position:relative;transition:background .4s}
+.conn.hot{background:var(--red);box-shadow:0 0 8px var(--red)}
+.conn.safe{background:var(--green)}
+@media(max-width:560px){.conn{width:16px}.nodex .nb{width:46px;height:46px}}
+
+.ladder{display:flex;flex-direction:column;gap:8px;max-width:420px}
+.rung{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:var(--panel2);border:1px solid var(--hair2);transition:all .4s}
+.rung .ricon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--dim);flex-shrink:0}
+.rung .ricon svg{width:18px;height:18px}
+.rung .rname{font-family:var(--mono);font-size:.82rem;color:var(--dim)}
+.rung.reached{border-color:var(--red);background:var(--red-dim)}
+.rung.reached .ricon,.rung.reached .rname{color:var(--red)}
+.rung.blocked{border-color:var(--green);background:var(--green-dim)}
+.rung.blocked .ricon,.rung.blocked .rname{color:var(--green)}
+
+.cve-list{display:flex;flex-direction:column;gap:9px;max-width:520px}
+.cve{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:10px;background:var(--panel2);border:1px solid var(--hair2);transition:all .4s}
+.cve .sev{font-family:var(--mono);font-size:.64rem;font-weight:700;padding:4px 9px;border-radius:6px;flex-shrink:0}
+.cve .sev.crit{background:var(--red-dim);color:var(--red)}
+.cve .sev.high{background:var(--amber-dim);color:var(--amber)}
+.cve .cid{font-family:var(--mono);font-size:.82rem;color:var(--ink);flex:1}
+.cve .cstat{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+.cve.patched{border-color:var(--green);background:var(--green-dim)}
+.cve.patched .cstat{color:var(--green)}
+
+.siem{font-family:var(--mono);font-size:.78rem;background:#06080c;border:1px solid var(--hair);border-radius:11px;padding:16px;max-width:600px;max-height:220px;overflow-y:auto}
+.logline{padding:5px 0;color:var(--dim);border-bottom:1px solid rgba(120,140,170,.06);opacity:0;transform:translateX(-10px);transition:all .4s}
+.logline.in{opacity:1;transform:translateX(0)}
+.logline .ts{color:var(--faint)}
+.logline.alert{color:var(--red)}
+.logline.alert .ts{color:var(--red)}
+.logline.ok{color:var(--green)}
+
+.controls{display:flex;flex-direction:column;gap:10px;max-width:560px}
+.control{display:flex;align-items:flex-start;gap:13px;padding:14px 16px;border-radius:11px;background:var(--panel2);border:1px solid var(--hair2);cursor:pointer;transition:all .2s}
+.control:hover{border-color:var(--green)}
+.control.on{border-color:var(--green);background:var(--green-dim)}
+.control .chk{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--hair2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.control.on .chk{background:var(--green);border-color:var(--green)}
+.control .chk svg{width:13px;height:13px;color:#06080c;opacity:0;transition:opacity .2s}
+.control.on .chk svg{opacity:1}
+.control .cbody .ct{font-weight:600;font-size:.9rem;color:var(--ink);margin-bottom:3px}
+.control .cbody .cd{font-size:.82rem;color:var(--dim);line-height:1.5}
+.defense-meter{margin-top:18px;max-width:560px}
+.dm-bar{height:10px;background:var(--panel2);border-radius:6px;overflow:hidden;border:1px solid var(--hair)}
+.dm-fill{height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--green));border-radius:6px;transition:width .5s}
+.dm-label{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-top:8px}
+.dm-label b{color:var(--green)}
+
+.simbtn{font-family:var(--sans);font-weight:600;font-size:.84rem;background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px 20px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px}
+.simbtn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.simbtn svg{width:15px;height:15px}
+.simbtn.ghost{background:transparent;color:var(--dim);border:1px solid var(--hair2)}
+.simbtn.ghost:hover{color:var(--ink)}
+.simbtn.green{background:var(--green);color:#06080c}
+.btnbar{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+footer{border-top:1px solid var(--hair);margin-top:60px;padding:34px 0 60px;text-align:center}
+footer .fl{font-family:var(--display);font-weight:700;font-size:1.1rem;margin-bottom:10px}
+footer .fb{font-family:var(--mono);font-size:.74rem;color:var(--dim)}
+footer .fb a{color:var(--red);text-decoration:none}
+footer .fb .who{color:var(--ink);font-family:var(--sans);font-weight:500}
+.disclaimer{font-family:var(--mono);font-size:.68rem;color:var(--faint);margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9.5 12l2 2 3.5-4"/></svg></div>
+      <div class="bt">KILL CHAIN <span>/ attack &amp; defence</span></div>
+    </div>
+    <div class="tag">Mapped to MITRE ATT&amp;CK</div>
+  </div>
+
+  <div class="hero">
+    <div class="kick">Interactive Security Fundamentals</div>
+    <h1>Follow a breach from <em>first click</em> to <em>full compromise</em></h1>
+    <p>Five attack vectors, shown as one continuous kill chain. For each stage, see how the attack works, how a SOC detects it, and how defenders stop it. Click, explore, and play defence.</p>
+    <div class="frameworks">
+      <div class="fw"><b>5</b> attack vectors</div>
+      <div class="fw"><b>3</b> views: attack · detect · defend</div>
+      <div class="fw">MITRE <b>ATT&amp;CK</b> aligned</div>
+    </div>
+  </div>
+
+  <div class="chain" id="chain"></div>
+  <div class="stage" id="stage"></div>
+
+  <footer>
+    <div class="fl">Built for defenders, by a defender.</div>
+    <div class="fb">Created by <span class="who">Mohammad Ansab Siddiqui</span> · ISC2 CC · CCNA · <a href="https://ansabsid.github.io">ansabsid.github.io</a> · <a href="https://linkedin.com/in/ansab-siddiqui">LinkedIn</a></div>
+    <div class="disclaimer">This is an educational tool. It explains attack concepts and their defences at a high level to build security awareness. It contains no working exploit code, payloads, or operational attack instructions.</div>
+  </footer>
+
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+
+const I={
+mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="4"/><path d="M11 11l8 8M16 16l2-2M19 19l2-2"/></svg>',
+network:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7 11l10-4M7 13l10 4"/></svg>',
+bug:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M12 8V5M9 4l1 2M15 4l-1 2M8 11H4M20 11h-4M8 15H4M20 15h-4"/></svg>',
+lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+server:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="1.5"/><rect x="4" y="13" width="16" height="7" rx="1.5"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>',
+user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>',
+admin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/><path d="M12 2l1.2 2.2M12 2l-1.2 2.2"/></svg>',
+laptop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 20h20"/></svg>',
+check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>',
+play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l11-7z"/></svg>',
+reset:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg>',
+shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>',
+file:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>',
+};
+
+const STAGES=[
+{id:'phish',icon:'mail',mitre:'TA0001 · Initial Access',title:'Phishing',sub:'How attackers get their first foothold',
+ attackH:'The lure',attackP:'Most breaches start with a single email. A <b>phishing</b> message impersonates someone trusted and pressures the target to click a link, open an attachment, or hand over credentials. It does not break technology — it exploits human trust and urgency.',
+ sim:'phish',
+ detectH:'How a SOC catches it',detectP:'Email security gateways score every message. Mismatched sender domains, suspicious links, and urgency language raise the risk score. When a user clicks, endpoint and proxy logs flag the connection to a known-bad domain.',
+ defendH:'How to stop it'},
+{id:'privesc',icon:'key',mitre:'TA0004 · Privilege Escalation',title:'Privilege Escalation',sub:'Turning a foothold into control',
+ attackH:'Climbing the ladder',attackP:'Initial access is usually a low-privilege account. The attacker looks for misconfigurations, unpatched flaws, or stored credentials to climb from a normal <b>user</b> to a local <b>admin</b>, and finally to <b>domain administrator</b> — full control of the environment.',
+ sim:'ladder',
+ detectH:'How a SOC catches it',detectP:'Sudden privilege changes, new admin accounts, and access to credential stores are high-signal events. A SIEM correlates a normal user suddenly performing admin actions and raises an alert.',
+ defendH:'How to stop it'},
+{id:'lateral',icon:'network',mitre:'TA0008 · Lateral Movement',title:'Lateral Movement',sub:'Spreading across the network',
+ attackH:'Hopping server to server',attackP:'With elevated access, the attacker moves sideways — from the first compromised machine to file servers, databases, and domain controllers. Each hop uses legitimate tools and stolen credentials, making it look like normal admin activity.',
+ sim:'lateral',
+ detectH:'How a SOC catches it',detectP:'Unusual east-west traffic between machines that never normally talk, logins at odd hours, and the same credential appearing on many hosts are classic lateral-movement signals. Network segmentation makes this movement visible and noisy.',
+ defendH:'How to stop it'},
+{id:'cve',icon:'bug',mitre:'TA0002 · Exploitation',title:'Vulnerability Exploitation',sub:'Walking through unlocked doors',
+ attackH:'Unpatched and exposed',attackP:'Every unpatched <b>CVE</b> is a known, documented door into a system. Attackers scan for systems missing critical patches and exploit them directly. The most damaging breaches in history often used vulnerabilities that had a patch available for months.',
+ sim:'cve',
+ detectH:'How a SOC catches it',detectP:'Vulnerability scanners continuously inventory what is unpatched and rank it by severity. Exploit attempts against known CVEs produce distinctive signatures that intrusion detection systems flag immediately.',
+ defendH:'How to stop it'},
+{id:'ransom',icon:'lock',mitre:'TA0040 · Impact',title:'Ransomware',sub:'The payload and the damage',
+ attackH:'Encryption and extortion',attackP:'The final stage. Having spread across the network, the attacker deploys <b>ransomware</b> that encrypts files on every reachable system simultaneously, then demands payment. Modern variants also steal data first, threatening to leak it — double extortion.',
+ sim:'ransom',
+ detectH:'How a SOC catches it',detectP:'Mass file modification in a short window is an unmistakable signal. Endpoint detection tools watch for rapid encryption behaviour and can automatically isolate a machine from the network the moment it starts.',
+ defendH:'How to stop it'}
+];
+
+const DEFENCES={
+phish:[['MFA on all accounts','Even stolen passwords are useless without the second factor.'],['Email security gateway','Scores and quarantines suspicious mail before it lands.'],['Security awareness training','Users who spot the lure never click it.'],['Link sandboxing','Detonates links in isolation before the user reaches them.']],
+privesc:[['Least privilege','Users get only the access they actually need.'],['Privileged Access Management','Vaults and audits every admin credential (e.g. CyberArk).'],['Patch management','Closes the local flaws used to escalate.'],['Monitor admin actions','Alerts the moment privileges change unexpectedly.']],
+lateral:[['Network segmentation','Walls off zones so one breach cannot reach everything.'],['Zero Trust','Every connection is verified, never assumed safe.'],['Disable legacy protocols','Removes the easy paths attackers reuse.'],['EDR on every host','Spots the tools and behaviour of lateral movement.']],
+cve:[['Patch management cadence','Apply critical patches fast and consistently.'],['Vulnerability scanning','Know what is exposed before attackers do.'],['Asset inventory','You cannot patch what you do not know you have.'],['Virtual patching / WAF','Shields a flaw until the real patch ships.']],
+ransom:[['Offline, tested backups','The single most effective recovery control.'],['EDR with auto-isolation','Stops encryption the moment it starts.'],['Network segmentation','Limits how far the payload can spread.'],['Incident response plan','A rehearsed plan turns chaos into recovery.']]
+};
+
+let current=0, activeTab='attack';
+
+function buildChain(){
+  const c=$('#chain'); c.innerHTML='';
+  STAGES.forEach((s,i)=>{
+    const el=document.createElement('div');
+    el.className='chain-step'+(i===current?' active':'')+(i<current?' done':'');
+    el.innerHTML=`<div class="cs-ico">${I[s.icon]}</div><div class="cs-n">0${i+1}</div><div class="cs-t">${s.title}</div>`;
+    el.onclick=()=>{current=i;activeTab='attack';render();};
+    c.appendChild(el);
+  });
+}
+
+function render(){
+  buildChain();
+  const s=STAGES[current];
+  $('#stage').innerHTML=`
+    <div class="stage-head">
+      <div class="sh-ico">${I[s.icon]}</div>
+      <div class="sh-meta">
+        <div class="sh-mitre">${s.mitre}</div>
+        <h2>${s.title}</h2>
+        <div class="sh-sub">${s.sub}</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab t-attack ${activeTab==='attack'?'on':''}" data-t="attack"><span class="tdot"></span>The Attack</button>
+      <button class="tab t-detect ${activeTab==='detect'?'on':''}" data-t="detect"><span class="tdot"></span>Detection</button>
+      <button class="tab t-defend ${activeTab==='defend'?'on':''}" data-t="defend"><span class="tdot"></span>Defence</button>
+    </div>
+    <div class="tabbody">
+      <div class="pane ${activeTab==='attack'?'show':''}">
+        <h3><span class="hd" style="background:var(--red)"></span>${s.attackH}</h3>
+        <p>${s.attackP}</p>
+        <div class="sim" id="simBox"></div>
+      </div>
+      <div class="pane ${activeTab==='detect'?'show':''}">
+        <h3><span class="hd" style="background:var(--amber)"></span>${s.detectH}</h3>
+        <p>${s.detectP}</p>
+        <div class="sim"><div class="sim-label">Live SIEM feed — what the analyst sees</div><div class="sim-cta">Click replay to watch the alerts fire</div><div class="siem" id="siemBox"></div><div class="btnbar"><button class="simbtn ghost" id="siemReplay">${I.reset} Replay feed</button></div></div>
+      </div>
+      <div class="pane ${activeTab==='defend'?'show':''}">
+        <h3><span class="hd" style="background:var(--green)"></span>${s.defendH}</h3>
+        <p>Toggle the controls a real security team would put in place. Watch your defence posture climb.</p>
+        <div class="controls" id="ctrlBox"></div>
+        <div class="defense-meter"><div class="dm-bar"><div class="dm-fill" id="dmFill"></div></div><div class="dm-label" id="dmLabel">0 of 4 controls active</div></div>
+      </div>
+    </div>`;
+  $$('#stage .tab').forEach(t=>t.onclick=()=>{activeTab=t.dataset.t;render();});
+  if(activeTab==='attack') buildSim(s.sim);
+  if(activeTab==='detect') buildSiem(s.id);
+  if(activeTab==='defend') buildDefence(s.id);
+}
+
+function buildSim(kind){
+  const box=$('#simBox'); if(!box)return;
+  if(kind==='phish'){
+    box.innerHTML=`<div class="sim-label">Spot the phish</div><div class="sim-cta">Click every suspicious element — there are 4</div>
+    <div class="mail">
+      <div class="mail-h">
+        <div class="row"><span class="lbl">From</span><span class="val"><span class="flag">IT-Support@arnazon-secure.net</span></span></div>
+        <div class="row"><span class="lbl">Subject</span><span class="val"><span class="flag">URGENT: Your account will be deleted in 24 hours</span></span></div>
+      </div>
+      <div class="mail-b">Dear User,<br><br>We detected unusual activity. You must <span class="flag">verify your password immediately</span> or lose access permanently.<br><br><span class="flag">Click here: http://secure-login-verify.tk/account</span><br><br>Regards,<br>The IT Team</div>
+    </div>
+    <div class="flag-count" id="flagCount">0 of 4 red flags found</div>`;
+    let found=0;const total=4;
+    $$('#simBox .flag').forEach(f=>f.onclick=()=>{
+      if(f.classList.contains('found'))return;
+      f.classList.add('found');found++;
+      const fc=$('#flagCount');
+      fc.innerHTML=found<total?`<b>${found}</b> of ${total} red flags found`:`<b>All 4 found</b> — fake sender domain, urgency, credential request, and a suspicious link. This is a phish.`;
+      if(found===total)fc.classList.add('done');
+    });
+  } else if(kind==='ladder'){
+    box.innerHTML=`<div class="sim-label">Privilege escalation path</div><div class="sim-cta">Click Escalate to watch the climb — then block it</div>
+    <div class="ladder" id="ladder">
+      <div class="rung"><div class="ricon">${I.user}</div><div class="rname">Standard User &nbsp;(foothold)</div></div>
+      <div class="rung"><div class="ricon">${I.laptop}</div><div class="rname">Local Administrator</div></div>
+      <div class="rung"><div class="ricon">${I.admin}</div><div class="rname">Domain Administrator &nbsp;(full control)</div></div>
+    </div>
+    <div class="btnbar"><button class="simbtn" id="escBtn">${I.play} Escalate</button><button class="simbtn green" id="blockBtn">${I.shield} Block with PAM</button><button class="simbtn ghost" id="ladReset">${I.reset} Reset</button></div>`;
+    const rungs=$$('#ladder .rung');
+    $('#escBtn').onclick=()=>{rungs.forEach(r=>r.classList.remove('blocked'));rungs.forEach((r,i)=>setTimeout(()=>r.classList.add('reached'),i*600));};
+    $('#blockBtn').onclick=()=>{rungs.forEach(r=>r.classList.remove('reached'));rungs[0].classList.add('reached');setTimeout(()=>{rungs[1].classList.add('blocked');rungs[2].classList.add('blocked');},400);};
+    $('#ladReset').onclick=()=>rungs.forEach(r=>r.classList.remove('reached','blocked'));
+  } else if(kind==='lateral'){
+    box.innerHTML=`<div class="sim-label">Lateral movement across the network</div><div class="sim-cta">Watch the breach spread — then contain it</div>
+    <div class="nodes-row" id="lat">
+      <div class="nodex"><div class="nb">${I.laptop}</div><div class="nl">patient zero</div></div>
+      <div class="conn"></div>
+      <div class="nodex"><div class="nb">${I.server}</div><div class="nl">file server</div></div>
+      <div class="conn"></div>
+      <div class="nodex"><div class="nb">${I.server}</div><div class="nl">database</div></div>
+      <div class="conn"></div>
+      <div class="nodex"><div class="nb">${I.admin}</div><div class="nl">domain ctrl</div></div>
+    </div>
+    <div class="btnbar"><button class="simbtn" id="spreadBtn">${I.play} Spread</button><button class="simbtn green" id="segBtn">${I.shield} Segment network</button><button class="simbtn ghost" id="latReset">${I.reset} Reset</button></div>`;
+    const ns=$$('#lat .nodex'),cs=$$('#lat .conn');
+    $('#spreadBtn').onclick=()=>{ns.forEach(n=>n.classList.remove('secured'));cs.forEach(c=>c.classList.remove('safe'));ns[0].classList.add('compromised');cs.forEach((c,i)=>setTimeout(()=>{c.classList.add('hot');ns[i+1].classList.add('compromised');},(i+1)*600));};
+    $('#segBtn').onclick=()=>{ns.forEach(n=>n.classList.remove('compromised'));cs.forEach(c=>c.classList.remove('hot'));ns[0].classList.add('compromised');setTimeout(()=>{cs[0].classList.add('safe');for(let i=1;i<ns.length;i++)ns[i].classList.add('secured');},400);};
+    $('#latReset').onclick=()=>{ns.forEach(n=>n.classList.remove('compromised','secured'));cs.forEach(c=>c.classList.remove('hot','safe'));};
+  } else if(kind==='cve'){
+    box.innerHTML=`<div class="sim-label">Unpatched vulnerabilities</div><div class="sim-cta">Patch all to close the doors before exploitation</div>
+    <div class="cve-list" id="cves">
+      <div class="cve"><span class="sev crit">CRITICAL</span><span class="cid">CVE-2024-1709 · remote code execution</span><span class="cstat">unpatched</span></div>
+      <div class="cve"><span class="sev crit">CRITICAL</span><span class="cid">CVE-2023-4863 · heap overflow</span><span class="cstat">unpatched</span></div>
+      <div class="cve"><span class="sev high">HIGH</span><span class="cid">CVE-2024-21413 · privilege bypass</span><span class="cstat">unpatched</span></div>
+    </div>
+    <div class="btnbar"><button class="simbtn green" id="patchBtn">${I.shield} Patch all</button><button class="simbtn ghost" id="cveReset">${I.reset} Reset</button></div>`;
+    const cves=$$('#cves .cve');
+    $('#patchBtn').onclick=()=>cves.forEach((c,i)=>setTimeout(()=>{c.classList.add('patched');c.querySelector('.cstat').textContent='patched';},i*450));
+    $('#cveReset').onclick=()=>cves.forEach(c=>{c.classList.remove('patched');c.querySelector('.cstat').textContent='unpatched';});
+  } else if(kind==='ransom'){
+    box.innerHTML=`<div class="sim-label">Ransomware impact &amp; recovery</div><div class="sim-cta">Watch encryption spread — then recover from backup</div>
+    <div class="nodes-row" id="ran">
+      <div class="nodex"><div class="nb">${I.file}</div><div class="nl">finance</div></div>
+      <div class="conn"></div>
+      <div class="nodex"><div class="nb">${I.file}</div><div class="nl">HR</div></div>
+      <div class="conn"></div>
+      <div class="nodex"><div class="nb">${I.file}</div><div class="nl">operations</div></div>
+      <div class="conn"></div>
+      <div class="nodex"><div class="nb">${I.server}</div><div class="nl">backups</div></div>
+    </div>
+    <div class="btnbar"><button class="simbtn" id="encBtn">${I.play} Detonate</button><button class="simbtn green" id="recBtn">${I.shield} Recover from backup</button><button class="simbtn ghost" id="ranReset">${I.reset} Reset</button></div>`;
+    const ns=$$('#ran .nodex'),cs=$$('#ran .conn');
+    $('#encBtn').onclick=()=>{ns.forEach(n=>n.classList.remove('secured'));ns.slice(0,3).forEach((n,i)=>setTimeout(()=>{n.classList.add('compromised');if(i<2)cs[i].classList.add('hot');},i*550));};
+    $('#recBtn').onclick=()=>{ns[3].classList.add('secured');setTimeout(()=>{ns.slice(0,3).forEach((n,i)=>setTimeout(()=>{n.classList.remove('compromised');n.classList.add('secured');},i*400));cs.forEach(c=>{c.classList.remove('hot');c.classList.add('safe');});},400);};
+    $('#ranReset').onclick=()=>{ns.forEach(n=>n.classList.remove('compromised','secured'));cs.forEach(c=>c.classList.remove('hot','safe'));};
+  }
+}
+
+const SIEM_FEEDS={
+phish:[['09:14:02','proxy: user clicked link to secure-login-verify.tk','alert'],['09:14:02','threat-intel: domain flagged NEWLY-REGISTERED','alert'],['09:14:03','mail-gw: sender SPF/DKIM failed for arnazon-secure.net','alert'],['09:14:05','SOC: incident #4471 raised — credential phishing','ok']],
+privesc:[['02:31:11','auth: user jsmith added to group Domain Admins',''],['02:31:11','correlation: jsmith never held admin rights before','alert'],['02:31:12','edr: credential-access tool signature detected','alert'],['02:31:14','SOC: incident #4472 raised — privilege escalation','ok']],
+lateral:[['03:02:40','netflow: WKS-014 connecting to 38 hosts in 60s','alert'],['03:02:41','auth: same credential across 12 servers','alert'],['03:02:43','ids: SMB admin-share east-west traffic','alert'],['03:02:45','SOC: incident #4473 raised — lateral movement','ok']],
+cve:[['11:47:20','ids: exploit attempt matching CVE-2024-1709','alert'],['11:47:20','scanner: target host missing critical patch','alert'],['11:47:21','waf: malformed payload blocked at perimeter','ok'],['11:47:23','SOC: incident #4474 raised — exploitation attempt','ok']],
+ransom:[['04:18:55','edr: 2,400 files modified in 8 seconds on FIN-SRV','alert'],['04:18:55','behaviour: rapid encryption pattern detected','alert'],['04:18:56','edr: host FIN-SRV auto-isolated from network','ok'],['04:18:57','SOC: incident #4475 raised — ransomware contained','ok']]
+};
+function buildSiem(id){
+  const box=$('#siemBox'); if(!box)return;
+  function play(){
+    box.innerHTML='';
+    SIEM_FEEDS[id].forEach((l,i)=>{
+      const el=document.createElement('div');
+      el.className='logline '+(l[2]||'');
+      el.innerHTML=`<span class="ts">[${l[0]}]</span> ${l[1]}`;
+      box.appendChild(el);
+      setTimeout(()=>el.classList.add('in'),200+i*600);
+    });
+  }
+  play();
+  const rb=$('#siemReplay'); if(rb) rb.onclick=play;
+}
+
+function buildDefence(id){
+  const box=$('#ctrlBox'); if(!box)return;
+  const list=DEFENCES[id]; box.innerHTML='';
+  list.forEach(c=>{
+    const el=document.createElement('div'); el.className='control';
+    el.innerHTML=`<div class="chk">${I.check}</div><div class="cbody"><div class="ct">${c[0]}</div><div class="cd">${c[1]}</div></div>`;
+    el.onclick=()=>{el.classList.toggle('on');updateMeter();};
+    box.appendChild(el);
+  });
+  function updateMeter(){
+    const on=$$('#ctrlBox .control.on').length,total=list.length;
+    $('#dmFill').style.width=(on/total*100)+'%';
+    const lbl=$('#dmLabel');
+    if(on===total)lbl.innerHTML=`<b>Fully hardened</b> — all ${total} controls active`;
+    else lbl.textContent=`${on} of ${total} controls active`;
+  }
+  updateMeter();
+}
+
+render();
+</script>
+</body>
+</html>
