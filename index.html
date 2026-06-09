@@ -373,6 +373,36 @@ nav{
 .projects-grid{
   display:grid;grid-template-columns:repeat(2,1fr);gap:28px;
 }
+/* Full-width card for featured project */
+.proj-card.featured{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:start;
+}
+.proj-card.featured .proj-body{
+  display:flex;flex-direction:column;
+}
+.proj-card.featured .proj-stats{
+  display:flex;flex-direction:column;gap:16px;
+  justify-content:center;
+}
+.proj-stat-item{
+  background:rgba(0,200,255,.05);
+  border:1px solid rgba(0,200,255,.12);
+  border-radius:10px;
+  padding:14px 18px;
+}
+.proj-stat-label{
+  font-family:var(--mono);font-size:.62rem;
+  color:var(--muted);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:4px;
+}
+.proj-stat-value{
+  font-family:var(--display);font-size:.95rem;
+  font-weight:700;color:var(--text);
+}
 .proj-card{
   background:var(--surface);
   border:1px solid var(--border);
@@ -397,6 +427,9 @@ nav{
   transform:translateY(-6px);
   box-shadow:0 24px 48px rgba(0,0,0,.3),0 0 0 1px rgba(0,200,255,.25);
   border-color:rgba(0,200,255,.3);
+}
+.proj-card.featured:hover{
+  transform:translateY(-4px);
 }
 .proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
 .proj-icon{
@@ -551,6 +584,7 @@ footer span{color:var(--cyan)}
   .exp-item{grid-template-columns:1fr;gap:8px}
   .exp-item::before,.exp-item::after{display:none}
   .projects-grid{grid-template-columns:1fr}
+  .proj-card.featured{grid-template-columns:1fr}
 }
 @media(max-width:600px){
   .nav-links{display:none}
@@ -564,7 +598,6 @@ footer span{color:var(--cyan)}
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-QF80T7N54Z');
 </script>
 </head>
@@ -728,7 +761,9 @@ footer span{color:var(--cyan)}
           <span class="tag">Microsoft Entra ID</span><span class="tag">Active Directory</span>
           <span class="tag">SSO / SAML</span><span class="tag">Provisioning</span>
           <span class="tag">CyberArk PAM</span><span class="tag">ISC2 CC</span>
-          <span class="tag">Vulnerability Mgmt</span><span class="tag">MFA</span>
+          <span class="tag">Microsoft Sentinel</span><span class="tag">KQL</span>
+          <span class="tag">Azure NSG</span><span class="tag">Vulnerability Mgmt</span>
+          <span class="tag">MFA</span>
         </div>
       </div>
 
@@ -737,9 +772,10 @@ footer span{color:var(--cyan)}
         <div class="sk-title">Cloud & Virtualization</div>
         <div class="sk-tags">
           <span class="tag">Microsoft Azure</span><span class="tag">AWS EC2 / S3</span>
-          <span class="tag">Azure Identity</span><span class="tag">VMware</span>
-          <span class="tag">VM Provisioning</span><span class="tag">IaaS / PaaS</span>
-          <span class="tag">Microsoft 365</span>
+          <span class="tag">Azure Bastion</span><span class="tag">Azure Identity</span>
+          <span class="tag">VMware</span><span class="tag">VM Provisioning</span>
+          <span class="tag">IaaS / PaaS</span><span class="tag">Microsoft 365</span>
+          <span class="tag">NSG Flow Logs</span>
         </div>
       </div>
 
@@ -856,6 +892,53 @@ footer span{color:var(--cyan)}
     <h2 class="section-title">Interactive <span>Projects</span></h2>
     <div class="projects-grid">
 
+      <!-- Azure Security Lab — featured full-width card -->
+      <a href="azure-security-lab.html" class="proj-card featured" target="_blank" rel="noopener">
+        <div class="proj-body">
+          <div class="proj-header">
+            <div class="proj-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <span class="proj-live">Live</span>
+          </div>
+          <div class="proj-type">Cloud Security · Lab · SIEM</div>
+          <div class="proj-title">Azure Cloud Security Lab</div>
+          <div class="proj-desc">An enterprise-grade cloud security lab built on Microsoft Azure. Two-VM architecture with DMZ segmentation, deny-all NSGs, and Azure Bastion for zero-exposure management. Microsoft Sentinel deployed as a SIEM with 9 data connectors and 4 custom KQL detection rules covering brute force, port scanning, unauthorized logins, and firewall changes.<br><br>Real attacks simulated from Kali Linux — Nmap reconnaissance, Nikto web scanning, Gobuster directory enumeration, and SSH brute force — all detected and raised as automatic incidents in Sentinel. Complete attack, detect, and investigate cycle proven end to end. Built entirely within the Azure free tier for under $5.</div>
+          <div class="proj-tech">
+            <span class="tag">Microsoft Azure</span><span class="tag">Microsoft Sentinel</span>
+            <span class="tag">KQL</span><span class="tag">Azure NSG</span>
+            <span class="tag">Azure Bastion</span><span class="tag">Kali Linux</span>
+            <span class="tag">Nmap</span><span class="tag">Nikto</span>
+            <span class="tag">Gobuster</span><span class="tag">SIEM</span>
+            <span class="tag">MITRE ATT&CK</span>
+          </div>
+          <span class="proj-cta">View full documentation <span class="arrow">→</span></span>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat-item">
+            <div class="proj-stat-label">VMs Deployed</div>
+            <div class="proj-stat-value">2 × Ubuntu 22.04 LTS</div>
+          </div>
+          <div class="proj-stat-item">
+            <div class="proj-stat-label">Sentinel Connectors</div>
+            <div class="proj-stat-value">9 of 10 Connected</div>
+          </div>
+          <div class="proj-stat-item">
+            <div class="proj-stat-label">KQL Detection Rules</div>
+            <div class="proj-stat-value">4 Custom Rules</div>
+          </div>
+          <div class="proj-stat-item">
+            <div class="proj-stat-label">Attacks Simulated</div>
+            <div class="proj-stat-value">Nmap · Nikto · Gobuster · SSH BF</div>
+          </div>
+          <div class="proj-stat-item">
+            <div class="proj-stat-label">Total Cloud Spend</div>
+            <div class="proj-stat-value">Under $5</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Kill Chain -->
       <a href="kill-chain.html" class="proj-card" target="_blank" rel="noopener">
         <div class="proj-header">
           <div class="proj-icon">
@@ -873,6 +956,7 @@ footer span{color:var(--cyan)}
         <span class="proj-cta">Launch interactive demo <span class="arrow">→</span></span>
       </a>
 
+      <!-- How a Machine Learns to Think -->
       <a href="how-ai-learns.html" class="proj-card" target="_blank" rel="noopener">
         <div class="proj-header">
           <div class="proj-icon">
